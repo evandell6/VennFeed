@@ -9,13 +9,13 @@ const reload = browserSync.reload
 var exec = require('child_process').exec;
 
 gulp.task('default', ['styles', 'webpack', 'browser-sync'], () => {
-  gulp.watch('./assets/sass/**/*', ['styles'])
-  gulp.watch('./assets/js/**/*', ['webpack'])
+  gulp.watch('./resources/assets/sass/**/*', ['styles'])
+  gulp.watch('./resources/assets/js/**/*', ['webpack'])
   gulp.watch(['./public/**/*', './public/*', '!public/js/**/.#*js', '!public/css/**/.#*css']).on('change', reload)
 })
 
 gulp.task('styles', () => {
-  gulp.src('assets/sass/**/*.scss')
+  gulp.src('resources/assets/sass/**/*.scss')
     .pipe(
       sass({
         outputStyle: 'compressed'
@@ -29,20 +29,22 @@ gulp.task('styles', () => {
 })
 
 gulp.task('browser-sync', ['styles'], function () {
-  // THIS IS FOR SITUATIONS WHEN YOU HAVE ANOTHER SERVER RUNNING
-  // browserSync.init({
-  //   proxy: {
-  //     target: 'localhost:3000', // can be [virtual host, sub-directory, localhost with port]
-  //     ws: true // enables websockets
-  //   },
-  //   serveStatic: ['.', './public']
-  // })
 
-  browserSync.init({
-        server: './public',
-        notify: false,
-        open: false //change this to true if you want the broser to open automatically 
-    });
+browserSync.init({
+proxy: {
+target: 'localhost:3333', // can be [virtual host, sub-directory, localhost with port]
+ws: true // enables websockets
+   },
+   notify: false,
+   open: false,
+     serveStatic: ['./', './public']
+   })
+
+//  browserSync.init({
+  //      server: './public',
+//        notify: false,
+//        open: false //change this to true if you want the broser to open automatically
+//    });
 })
 
 gulp.task('webpack', (cb) => {
